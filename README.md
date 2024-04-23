@@ -9,7 +9,8 @@
 
 ## Tehnologije
 #### ReactNative 
-![ReactNative logo](repo-assets/react-native-1.svg =80x80)
+
+<img src="repo-assets/react-native-1.svg" width="80" height="80" />
 
 ReactNative je razvojni okvir koji razvija Meta, a omogućuje pisanje koda aplikacije u JavaScriptu koji može pristupiti nativnim komponentama sustava i tako pruža mogućnost pisanja pravih nativnih aplikacija u JavaScriptu. To je različit pristup od drugih okvira poput Google-ovog Flutter-a. ReactNative aplikacije funkcioniraju tako da JavaScript kod koji se izvršava u posebnoj dretvi komunicira preko mosta sa nativinim kodom koji se izvršava u svojoj posebnom dretvi. Ta komunikacija je asinkrona i zasnova na događajima. JavaScript kod se izvršava pomoću posebnog JIT prevoditelja Hermes koji je napisan specifično za ReactNative od strane ReactNative tima. (**Napomena:** arhitektura ReactNative aplikacija se mijenja i više neće funkcionirati na ovaj način, ali ova aplikacija je izrađena po ovoj staroj arhitekturi.)
 
