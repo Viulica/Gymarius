@@ -22,19 +22,18 @@ ReactNative je razvojni okvir koji razvija Meta, a omogućuje pisanje koda aplik
 Službena stranica nalazi se [ovdje](https://reactnative.dev/).
 
 #### Expo
-<img src="repo-assets/expo_logo.svg" width="80" height="80" alt="Expo logo" />
 
+<img src="repo-assets/expo_logo.svg" width="80" height="80" alt="Expo logo" />
 
 Expo je set alata koji nadograđuju ReactNative i olakšavaju rad s ReactNative-om tako da dodaje integracije s raznim nativnim komponentama poput kamere ili obavijesti, olakšava objavu aplikacije na Google Play-u ili Apple App Store-u i omogućava brži razvoj zbog mogućnosti kao što je *hot realoading*. Također Expo omogućava lagani izlazak iz njegovog ekosustava ako je potrebna nativna funkcionalnost koja nije još podržana tako da u moderno vrijeme nema previše razloga zašto ne koristiti Expo. Više o Expu može se pročitati na službenim stranicama [ovdje](https://expo.dev/).
 
 #### OpenAI API
-<img src="repo-assets/openai.svg" width="80" height="80" alt="OpenAI logo" />
 
+<img src="repo-assets/openai.svg" width="80" height="80" alt="OpenAI logo" />
 
 OpenAI je 2022 revolucionarizirao svijet umjetne inteligencije kada je pokazao ChatGPT. Ova aplikacija pokušava iskoristit dio mogućnosti GPT modela preko API-a koji nudi OpenAI kako bi pokretala svoju chatbot funkcionalnost. Taj API omogućava direktnu komunikaciju s GPT modelom preko JSON sučelja i time aplikacija može izraditi funkcionalnost chatbota bez puno muke.
 
-<a id="pokretanje" />
-
+<a id="pokretanje"></a>
 ## Pokretanje razvojnog okruženja
 Kako bi se pokrenulo razvojno okruženje potrebno je slijediti sljedeće korake.
 
