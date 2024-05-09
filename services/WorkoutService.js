@@ -10,6 +10,7 @@ class WorkoutService {
     
 
     static async initializeAppData() {
+        console.log("hello")
         const currentData = await AsyncStorage.getItem(this.storageKey);
         if (!currentData) {
             const initialData = {
@@ -27,9 +28,15 @@ class WorkoutService {
 
     static async addWorkout(workout) {
         const data = await this.getData();
-        data.workouts.push(workout);
-        await AsyncStorage.setItem(this.storageKey, JSON.stringify(data));
+        if (data && data.workouts) {
+            data.workouts.push(workout);
+            console.log("Adding new workout:", workout);
+            await AsyncStorage.setItem(this.storageKey, JSON.stringify(data));
+        } else {
+            console.error("Failed to retrieve data for updating");
+        }
     }
+    
 
     static async deleteWorkout(id) {
         const data = await this.getData();

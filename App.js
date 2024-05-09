@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import NewWorkoutScreen from './screens/NewWorkoutScreen';
 import HistoryScreen from './screens/HistoryScreen';
 import StatsContainer from "./screens/StatsContainer";
+import { WorkoutProvider } from './screens/WorkoutContext';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,8 +38,11 @@ function MyTabs() {
 
 export default function App() {
     return (
-        <NavigationContainer>
-            <MyTabs />
-        </NavigationContainer>
+        <WorkoutProvider>
+            <NavigationContainer>
+                <MyTabs />
+            </NavigationContainer>
+        </WorkoutProvider>
+
     );
 }
