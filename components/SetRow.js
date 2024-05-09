@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 const SetRow = ({ onAddSet }) => {
     const [weight, setWeight] = useState('');
@@ -11,17 +11,17 @@ const SetRow = ({ onAddSet }) => {
                 style={styles.input}
                 value={weight}
                 onChangeText={setWeight}
-                placeholder="Weight (kg)"
                 keyboardType="numeric"
             />
             <TextInput
                 style={styles.input}
                 value={reps}
                 onChangeText={setReps}
-                placeholder="Reps"
                 keyboardType="numeric"
             />
-            <Button title="Add" onPress={() => onAddSet(weight, reps)} />
+            <TouchableOpacity style={styles.addButton} onPress={() => onAddSet(weight, reps)}>
+                <Text style={styles.buttonText}>Add</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -37,7 +37,19 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ccc',
         padding: 10,
-        width: 70,
+        width: 100,
+        marginRight: 10,
+        borderRadius: 5
+    },
+    addButton: {
+        backgroundColor: '#007AFF',  
+        borderRadius: 5,
+        padding: 10,
+        width: 100,
+    },
+    buttonText: {
+        color: 'white',
+        textAlign: 'center',
     }
 });
 

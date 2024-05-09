@@ -9,9 +9,8 @@ const AddWorkoutScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Add a new workout</Text>
             <TouchableOpacity style={styles.button} onPress={handleAddWorkout}>
-                <Text style={styles.buttonText}>Add Workout</Text>
+                <Text style={styles.buttonText}>New Workout </Text>
             </TouchableOpacity>
         </View>
     );
