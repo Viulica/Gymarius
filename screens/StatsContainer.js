@@ -1,26 +1,28 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
-import { WorkoutProvider, useWorkouts } from './WorkoutContext'; // Import your newly created context
+import WorkoutService from '../services/WorkoutService';
 import StatisticsScreen from './StatisticsScreen';
 
-const StatsContainer = () => {
-    const { workouts, loadWorkouts } = useWorkouts();
+const StatsContainer = ({ navigation }) => {
+    const [workouts, setWorkouts] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const init = async () => {
-            try {
-                await loadWorkouts();
-                setLoading(false);
-            } catch (error) {
-                console.error('Error loading workouts:', error);
-                setLoading(false); // Ensure loading is set to false even on error
-                // Optionally set an error state here to show an error message
-            }
-        };
-    
-        init();
-    }, [loadWorkouts]);
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchWorkouts();
+        });
+
+        fetchWorkouts();  // Fetch initially on load
+
+        return unsubscribe;
+    }, [navigation]);
+
+    const fetchWorkouts = async () => {
+        const allWorkouts = await WorkoutService.getWorkouts();
+        setWorkouts(allWorkouts);
+        setLoading(false)
+    };
+
     if (loading) {
         return <ActivityIndicator size="large" color="#0000ff" />;
     }
@@ -36,8 +38,4 @@ const StatsContainer = () => {
     );
 };
 
-export default () => (
-    <WorkoutProvider>
-        <StatsContainer />
-    </WorkoutProvider>
-);
+export default StatsContainer;

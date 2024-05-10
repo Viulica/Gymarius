@@ -8,6 +8,7 @@ const StatisticsScreen = ({ workouts = [] }) => {
   const [chartData, setChartData] = useState({ labels: [], datasets: [{ data: [] }] });
   const [currentPeriodCount, setCurrentPeriodCount] = useState(0);
   const scrollViewRef = useRef();
+  const [maxWorkoutCount, setMaxWorkoutCount] = useState(0);  // New state for max workout count
 
   const screenWidth = Dimensions.get('window').width;
 
@@ -24,6 +25,12 @@ const StatisticsScreen = ({ workouts = [] }) => {
     }
   };
   const chartWidth = getChartWidth(mode);
+
+  useEffect(() => {
+    const { labels, datasets, maxWorkouts } = countWorkouts(workouts, mode);
+    setChartData({ labels, datasets });
+    setMaxWorkoutCount(maxWorkouts); // You need to add this state variable
+  }, [mode, workouts]);
 
   const chartConfig = {
     backgroundColor: '#e26a00',
@@ -92,12 +99,25 @@ const StatisticsScreen = ({ workouts = [] }) => {
 
   const countWorkouts = (workouts, mode) => {
     const counts = {};
-    const maxCounts = mode === 'week' ? 52 : (mode === 'year' ? moment().year() - moment(workouts[0]?.date).year() + 1 : 12);
-
-    for (let i = 1; i <= maxCounts; i++) {
-      counts[i] = 0;
+    let minYear = new Date().getFullYear();
+    let maxYear = new Date().getFullYear();
+  
+    if (mode === 'year' && workouts.length > 0) {
+      minYear = moment(workouts.reduce((min, p) => p.date < min ? p.date : min, workouts[0].date)).year();
+      maxYear = moment(workouts.reduce((max, p) => p.date > max ? p.date : max, workouts[0].date)).year();
     }
-
+  
+    if (mode === 'year') {
+      for (let i = minYear; i <= maxYear; i++) {
+        counts[i] = 0; // Initialize counts for each year found in the data
+      }
+    } else {
+      const maxCounts = mode === 'week' ? 52 : 12;
+      for (let i = 1; i <= maxCounts; i++) {
+        counts[i] = 0;
+      }
+    }
+  
     workouts.forEach(workout => {
       const date = moment(workout.date);
       let key;
@@ -106,7 +126,7 @@ const StatisticsScreen = ({ workouts = [] }) => {
           key = date.week();
           break;
         case 'month':
-          key = date.month() + 1;
+          key = date.month() + 1; // month is zero-indexed
           break;
         case 'year':
           key = date.year();
@@ -116,16 +136,21 @@ const StatisticsScreen = ({ workouts = [] }) => {
         counts[key]++;
       }
     });
-
+  
     const labels = Object.keys(counts).sort((a, b) => parseInt(a) - parseInt(b));
     const values = labels.map(label => counts[label]);
+    const maxWorkouts = Math.max(...values); // Find the max value for dynamic y-axis adjustment
+    setMaxWorkoutCount(maxWorkouts)
+  
     return {
       labels,
       datasets: [{
         data: values
-      }]
+      }],
+      maxWorkouts
     };
   };
+  
 
   return (
     <View style={{ flex: 1 }}>
@@ -140,16 +165,18 @@ const StatisticsScreen = ({ workouts = [] }) => {
         showsHorizontalScrollIndicator={true}
         style={{ flex: 1 }}
       >
-        <BarChart
-          data={chartData}
-          width={chartWidth}
-          height={220}
-          yAxisLabel=""
-          yAxisInterval={1}
-          chartConfig={chartConfig}
-          verticalLabelRotation={30}
-          fromZero={true}
-        />
+      <BarChart
+        data={chartData}
+        width={chartWidth}
+        height={220}
+        yAxisLabel=""
+        yAxisInterval={1} // You might adjust this based on your needs
+        chartConfig={chartConfig}
+        verticalLabelRotation={30}
+        fromZero={true}
+        segments={maxWorkoutCount} // This ensures the chart divides evenly into segments
+      />
+
       </ScrollView>
       <Text style={styles.infoText}>
         This {mode}: {currentPeriodCount}
