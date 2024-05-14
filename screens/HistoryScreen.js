@@ -61,7 +61,7 @@ const HistoryScreen = ({ navigation }) => {
                     style={styles.workoutDetails} 
                     onPress={() => toggleDetails(workout.id)}
                 >
-                    <Text style={styles.workoutTitle}>Workout {index + 1}</Text>
+                    <Text style={styles.workoutTitle}>{workout.name}</Text>
                     <Text>Date: {moment(workout.date).format('D.M.YYYY')}</Text> 
                     <Text>Exercises: {workout.exercises.length}</Text>
                     {expandedWorkoutIds.includes(workout.id) && (

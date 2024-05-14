@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Alert, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Alert, Modal, TextInput } from 'react-native';
 import ExercisePicker from '../components/ExercisePicker';
 import WorkoutService from '../services/WorkoutService';
 import ExerciseCard from '../components/ExerciseCard';
+import { useChat } from './ChatContext';
+
 
 const NewWorkoutScreen = ({ navigation }) => {
     const predefinedExercises = [
@@ -14,6 +16,9 @@ const NewWorkoutScreen = ({ navigation }) => {
     const [selectedExerciseId, setSelectedExerciseId] = useState(null);
     const [workoutExercises, setWorkoutExercises] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const { chatHistory, setChatHistory } = useChat();
+    const [workoutName, setWorkoutName] = useState(''); 
+
 
     const addExerciseToWorkout = () => {
         const exercise = predefinedExercises.find(e => e.id === selectedExerciseId);
@@ -40,6 +45,7 @@ const NewWorkoutScreen = ({ navigation }) => {
         }
 
         const workout = {
+            name: workoutName || 'Unnamed Workout', 
             id: `workout-${new Date().getTime()}`,
             date: new Date().toISOString(),
             exercises: workoutExercises
@@ -49,6 +55,8 @@ const NewWorkoutScreen = ({ navigation }) => {
             await WorkoutService.addWorkout(workout);
             Alert.alert("Success", "Workout saved successfully!");
             setWorkoutExercises([]);
+            setChatHistory([]);
+            setWorkoutName(''); // Reset workout name
             navigation.navigate('History');
         } catch (error) {
             Alert.alert("Error", "Failed to save the workout. Please try again.");
@@ -58,10 +66,18 @@ const NewWorkoutScreen = ({ navigation }) => {
 
     const clearWorkout = () => {
         setWorkoutExercises([]); // Clear the workout
+        setWorkoutName(''); // Reset workout name
     };
 
     return (
         <View style={styles.container}>
+            <TextInput
+                style={styles.workoutNameInput}
+                placeholder="Enter Workout Name"
+                value={workoutName}
+                onChangeText={setWorkoutName}
+                placeholderTextColor="#ccc"
+            />
             <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.addButton}>
                 <Text style={styles.buttonText}>Add Exercise</Text>
             </TouchableOpacity>
@@ -78,6 +94,10 @@ const NewWorkoutScreen = ({ navigation }) => {
                 <TouchableOpacity style={styles.cancelButton} onPress={clearWorkout}>
                     <Text style={styles.buttonText}>Cancel Workout</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('Chat')} style={styles.chatButton}>
+                    <Text style={styles.buttonText}>Ask Coach</Text>
+                </TouchableOpacity>
+
             </View>
             <Modal
                 animationType="slide"
@@ -113,6 +133,18 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#f9f9f9',
     },
+    workoutNameInput: {
+        fontSize: 18,
+        marginBottom: 20,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        borderWidth: 1,
+        borderColor: '#cccccc',
+        borderRadius: 5,
+        backgroundColor: '#FFFFFF',
+        color: '#333333',
+        width: '100%', 
+    },
     addButton: {
         padding: 10,
         backgroundColor: '#1565C0',
@@ -130,12 +162,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 20,
+        gap: 10
     },
     saveButton: {
         flex: 0.48,
         backgroundColor: '#00C853',
         borderRadius: 5,
         padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     cancelButton: {
         flex: 0.48,
@@ -164,6 +199,13 @@ const styles = StyleSheet.create({
         color: '#007AFF',
         fontSize: 16,
     },
+    chatButton: {
+        flex: 0.32,
+        backgroundColor: '#4A90E2', 
+        borderRadius: 5,
+        padding: 10,
+    }
 });
+
 
 export default NewWorkoutScreen;
