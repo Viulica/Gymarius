@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_KEY = 'sk-proj-iSTYA2YRW0wOcpj9ZOPKT3BlbkFJgQQenkyXYMqITFQteets';
+const API_KEY = '';
 const API_URL = 'https://api.openai.com/v1/chat/completions';
 
 export const askChatbot = async (messages) => {
